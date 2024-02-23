@@ -1,4 +1,5 @@
-FROM linuxkit/alpine:33063834cf72d563cd8703467836aaa2f2b5a300 as alpine
+# Dockerfile to build linuxkit/runc for linuxkit
+FROM linuxkit/alpine:146f540f25cd92ec8ff0c5b0c98342a9a95e479e as alpine
 RUN \
   apk add \
   bash \
@@ -12,7 +13,7 @@ RUN \
   make \
   && true
 ENV GOPATH=/go PATH=$PATH:/go/bin GO111MODULE=off
-ENV RUNC_COMMIT=v1.0.3
+ENV RUNC_COMMIT=v1.1.12
 RUN mkdir -p $GOPATH/src/github.com/opencontainers && \
   cd $GOPATH/src/github.com/opencontainers && \
   git clone https://github.com/opencontainers/runc.git
@@ -30,3 +31,5 @@ ENTRYPOINT []
 COPY --from=alpine /usr/bin/runc /usr/bin/
 COPY --from=alpine /etc/init.d/ /etc/init.d/
 COPY --from=alpine /etc/shutdown.d/ /etc/shutdown.d/
+COPY --from=alpine /etc/apk /etc/apk/
+COPY --from=alpine /lib/apk /lib/apk/

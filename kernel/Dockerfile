@@ -23,6 +23,7 @@ RUN apk add \
     mpc1-dev \
     mpfr-dev \
     ncurses-dev \
+    openssl \
     openssl-dev \
     patch \
     rsync \
@@ -102,7 +103,7 @@ RUN set -e && \
     fi
 
 # Save kernel source
-RUN tar cJf /out/src/linux.tar.xz /linux
+RUN XZ_DEFAULTS="-T0" tar cJf /out/src/linux.tar.xz /linux
 
 # Kernel config
 RUN case $(uname -m) in \
@@ -144,7 +145,7 @@ RUN make -j "$(getconf _NPROCESSORS_ONLN)" KCFLAGS="-fno-pie" && \
 RUN make INSTALL_MOD_PATH=/tmp/kernel-modules modules_install && \
     ( DVER=$(basename $(find /tmp/kernel-modules/lib/modules/ -mindepth 1 -maxdepth 1)) && \
       cd /tmp/kernel-modules/lib/modules/$DVER && \
-      rm build source && \
+      rm -f build source && \
       ln -s /usr/src/linux-headers-$DVER build ) && \
     case $(uname -m) in \
     aarch64) \

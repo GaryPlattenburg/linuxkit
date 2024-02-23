@@ -1,4 +1,4 @@
-FROM linuxkit/alpine:33063834cf72d563cd8703467836aaa2f2b5a300 AS mirror
+FROM linuxkit/alpine:146f540f25cd92ec8ff0c5b0c98342a9a95e479e AS mirror
 
 RUN mkdir -p /out/etc/apk && cp -r /etc/apk/* /out/etc/apk/
 RUN apk add --no-cache --initdb -p /out \
@@ -9,9 +9,11 @@ RUN apk add --no-cache --initdb -p /out \
     && true
 RUN rm -rf /out/etc/apk /out/lib/apk /out/var/cache
 
-FROM linuxkit/alpine:33063834cf72d563cd8703467836aaa2f2b5a300 AS build
+FROM linuxkit/alpine:146f540f25cd92ec8ff0c5b0c98342a9a95e479e AS build
 
 RUN apk add --no-cache go musl-dev
+ARG GOPKGVERSION
+ENV ldflags="-X main.Version=$GOPKGVERSION"
 ENV GOPATH=/go PATH=$PATH:/go/bin
 # Hack to work around an issue with go on arm64 requiring gcc
 RUN [ $(uname -m) = aarch64 ] && apk add --no-cache gcc || true

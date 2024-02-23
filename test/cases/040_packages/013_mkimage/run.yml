@@ -1,9 +1,9 @@
 kernel:
-  image: linuxkit/kernel:5.10.92
+  image: linuxkit/kernel:5.10.104
   cmdline: "console=ttyS0 console=ttyAMA0"
 init:
-  - linuxkit/init:7e3d51e6ab5896ecb36a4829450f7430f2878927
-  - linuxkit/runc:9f7aad4eb5e4360cc9ed8778a5c501cce6e21601
+  - linuxkit/init:45a1ad5919f0b6acf0f0cf730e9434abfae11fe6
+  - linuxkit/runc:6062483d748609d505f2bcde4e52ee64a3329f5f
 onboot:
   - name: poweroff
-    image: linuxkit/poweroff:39d99e5909b6f8faccedc78d6d2646cdb6c9ed9c
+    image: linuxkit/poweroff:401dc53c604c0b2179ed0369a6968fd4179cc176
